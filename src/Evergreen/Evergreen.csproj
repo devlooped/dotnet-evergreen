@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>A dotnet global tool runner that automatically updates the tool package before running it and actively monitors for changes while it runs.</Description>
+
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net5.0</TargetFrameworks>
+
+    <AssemblyName>evergreen</AssemblyName>
+    <RootNamespace>Devlooped</RootNamespace>
+
+    <PackageId>dotnet-evergreen</PackageId>
+    <ToolCommandName>dotnet-evergreen</ToolCommandName>
+    <PackAsTool>true</PackAsTool>  
+  </PropertyGroup>
+
+</Project>
