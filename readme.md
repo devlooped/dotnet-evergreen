@@ -12,13 +12,14 @@ Usage:
   dotnet evergreen [options] [<tool> [<args>...]]
 
 Arguments:
-  <tool>  Tool to run
+  <tool>  Package Id of tool to run.
   <args>  Additional arguments and options supported by the tool
 
 Options:
   -s, --source <source>      NuGet feed to check for updates. [default: https://api.nuget.org/v3/index.json]
   -i, --interval <interval>  Time interval in seconds for the update checks. [default: 5]
   -?, -h, --help             Show help and usage information
+  --version                  Show version information
 ```
 
 Features:
