@@ -19,7 +19,7 @@ namespace Devlooped
         public Process Start(ProcessStartInfo start, CancellationTokenSource cancellation)
         {
             var process = Process.Start(start);
-            AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)}:{process!.Id} started[/]");
+            AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)}:{process!.Id} Started[/]");
 
             process!.EnableRaisingEvents = true;
             var cancelled = false;
@@ -59,9 +59,16 @@ namespace Devlooped
                 if (!cancelled)
                 {
                     if (process.ExitCode == 0)
-                        AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)} exited[/]");
+                        AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)} Exited[/]");
                     else
-                        AnsiConsole.MarkupLine($"[red]{Path.GetFileNameWithoutExtension(start.FileName)} exited[/]");
+                        AnsiConsole.MarkupLine($"[red]{Path.GetFileNameWithoutExtension(start.FileName)} Exited[/]");
+                }
+                else
+                {
+                    if (ShutdownToken.IsCancellationRequested)
+                        AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)} Shutdown[/]");
+                    else
+                        AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)} Restarting[/]");
                 }
 
                 // If the tool exits with an error, exit the application too,
