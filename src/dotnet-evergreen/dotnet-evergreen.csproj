@@ -1,7 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>A dotnet global tool runner that automatically updates the tool package before running it and actively monitors for changes while it runs.</Description>
+    <Description>
+      A dotnet global tool runner that automatically updates the tool package before running it,
+      automatically checks for updates while it runs, and restarts the tool as needed after
+      updating it.
+    </Description>
 
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net5.0;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
