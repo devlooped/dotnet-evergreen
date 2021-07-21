@@ -20,6 +20,8 @@
     <PackAsTool>true</PackAsTool>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageTags>dotnet dotnet-tool</PackageTags>
+
+    <PackageProjectUrl>https://clarius.org/dotnet-evergreen</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
