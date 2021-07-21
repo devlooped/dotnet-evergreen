@@ -35,6 +35,26 @@ namespace Devlooped
             return process.ExitCode;
         }
 
+#if !NET5_0_OR_GREATER
+        // Pollyfill for Process.WaitForExitAsync
+        /// <summary>
+        /// Instructs the process component to wait for the associated process to exit, or for the cancellationToken to be cancelled.
+        /// </summary>
+        /// <param name="process">The process to wait for cancellation.</param>
+        /// <param name="cancellationToken">An optional token to cancel the asynchronous operation.</param>
+        /// <returns>A task that will complete when the process has exited, cancellation has been requested, or an error occurs.</returns>
+        public static Task WaitForExitAsync(this Process process, CancellationToken cancellationToken = default)
+        {
+            var tcs = new TaskCompletionSource<object?>();
+            process.EnableRaisingEvents = true;
+            process.Exited += (sender, args) => tcs.TrySetResult(null);
+            if (cancellationToken != default)
+                cancellationToken.Register(tcs.SetCanceled);
+
+            return tcs.Task;
+        }
+#endif
+
         public static bool TryExecute(string program, string arguments, out string output)
         {
             var info = new ProcessStartInfo(program, arguments)

@@ -81,7 +81,7 @@ if (!await tools.InstallOrUpdateAsync("dotnet-stop"))
     // Whatever tool install/update error would have already been written to output at this point.
     return Exit();
 
-if (!await tools.InstallOrUpdateAsync(tool))
+if (!await tools.InstallOrUpdateAsync(tool!))
     return Exit();
 
 var info = tools.Installed.First(x => x.PackageId == tool);
@@ -127,7 +127,7 @@ void CheckUpdates()
                 // Causes the running tool to be stopped while we update. See Application.Start.
                 toolCancellation.Cancel();
 
-                if (!tools.Update(tool))
+                if (!tools.Update(tool!))
                     return Exit($"Failed to update {tool}");
 
                 info = tools.Installed.First(x => x.Commands == tool || x.PackageId == tool);
