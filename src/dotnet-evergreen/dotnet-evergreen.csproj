@@ -15,7 +15,7 @@
     <RootNamespace>Devlooped</RootNamespace>
     <SignAssembly>false</SignAssembly>
 
-    <IsPackable>true</IsPackable>
+    <PackageId>dotnet-evergreen</PackageId>
     <ToolCommandName>dotnet-evergreen</ToolCommandName>
     <PackAsTool>true</PackAsTool>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
