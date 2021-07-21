@@ -1,5 +1,17 @@
 
 
+## [v1.0.1](https://github.com/devlooped/dotnet-evergreen/tree/v1.0.1) (2021-07-21)
+
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.0.0...v1.0.1)
+
+:sparkles: Implemented enhancements:
+
+- Stop child process silently [\#3](https://github.com/devlooped/dotnet-evergreen/issues/3)
+
+:bug: Fixed bugs:
+
+- Add missing repository information to package [\#2](https://github.com/devlooped/dotnet-evergreen/issues/2)
+
 ## [v1.0.0](https://github.com/devlooped/dotnet-evergreen/tree/v1.0.0) (2021-07-21)
 
 [Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/e24711c6b7dff84d1f75ce3eca12296d36197096...v1.0.0)
