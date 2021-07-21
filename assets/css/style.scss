@@ -1,7 +1,8 @@
 ---
 ---
 
-@import "jekyll-theme-slate";
+@import "jekyll-theme-slate"
+;
 
 .inner {
     max-width: 960px;
@@ -12,6 +13,15 @@ pre, code {
     font-size: unset;
 }
 
- code {
+code {
     font-size: 0.80em;
+}
+
+h1 > img {
+    border: unset;
+    box-shadow: unset;
+    vertical-align: middle;
+    -moz-box-shadow: unset;
+    -o-box-shadow: unset;
+    -ms-box-shadow: unset;
 }
