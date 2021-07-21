@@ -61,7 +61,7 @@ int ShowHelp() => new CommandLineBuilder(new RootCommand("Run an evergreen versi
     .Invoke("-h");
 
 if (string.IsNullOrEmpty(tool))
-    return ShowHelp();   
+    return ShowHelp();
 
 // Now that we know we have a tool command, strip the arguments *after* the tool 
 // and re-parse the options, just so we don't accidentally grab a tool option as ours.
@@ -173,7 +173,7 @@ class ToolHelpBuilder : HelpBuilder
         readonly IConsole console;
         readonly IStandardStreamWriter writer;
 
-        public EvergreenConsole(IConsole console) 
+        public EvergreenConsole(IConsole console)
         {
             this.console = console;
             writer = new EvergreenWriter(console.Out);

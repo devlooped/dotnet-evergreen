@@ -20,7 +20,7 @@ namespace Devlooped
         {
             var process = Process.Start(start);
             AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)}:{process!.Id} started[/]");
-            
+
             process!.EnableRaisingEvents = true;
             var cancelled = false;
 
@@ -34,8 +34,8 @@ namespace Devlooped
                 try
                 {
                     if (!process.HasExited &&
-                        Process.Start(new ProcessStartInfo(DotnetMuxer.Path!.FullName, $"stop {process.Id} -t 2000") 
-                        { 
+                        Process.Start(new ProcessStartInfo(DotnetMuxer.Path!.FullName, $"stop {process.Id} -t 2000")
+                        {
                             // Avoid the output of the dotnet-stop tool from polluting ours, since we'll kill the 
                             // process if it doesn't exit cleanly anyway and we're getting output from it already.
                             CreateNoWindow = true,
