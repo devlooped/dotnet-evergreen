@@ -21,8 +21,10 @@ Arguments:
 Options:
   -s, --source <source>      NuGet feed to check for updates. [default: https://api.nuget.org/v3/index.json]
   -i, --interval <interval>  Time interval in seconds for the update checks. [default: 5]
+  -q, --quiet                Do not display any informational messages.
   -?, -h, --help             Show help and usage information
   --version                  Show version information
+
 ```
 
 Features:

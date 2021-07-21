@@ -16,7 +16,6 @@ using static Devlooped.Extensions;
 const string NuGetFeed = "https://api.nuget.org/v3/index.json";
 
 var config = Config.Build().GetSection("evergreen");
-var app = new Application();
 
 // Only append symbols we can't gather from configuration, which makes it 
 // possible to avoid consuming arguments from the tool being executed.
@@ -28,10 +27,11 @@ var toolArg = new Argument<string>("tool", "Package Id of tool to run.");
 var toolArgs = new Argument<string[]>("args", "Additional arguments and options supported by the tool");
 var sourceOpt = new Option<string>(new[] { "-s", "--source", "/s", "/source" }, () => source, "NuGet feed to check for updates.");
 var intervalOpt = new Option<int>(new[] { "-i", "--interval", "/i", "/interval" }, () => interval.GetValueOrDefault(5), "Time interval in seconds for the update checks.");
+var quietOpt = new Option(new[] { "-q", "--quiet", "/q", "/quiet" }, "Do not display any informational messages.");
 var helpOpt = new Option(new[] { "-h", "/h", "--help", "-?", "/?" });
 
 // First do full parse to detect tool/source
-var parser = new Parser(toolArg, toolArgs, intervalOpt, sourceOpt, helpOpt);
+var parser = new Parser(toolArg, toolArgs, intervalOpt, sourceOpt, quietOpt, helpOpt);
 var result = parser.Parse(args);
 var tool = result.ValueForArgument(toolArg);
 
@@ -41,6 +41,7 @@ int ShowHelp() => new CommandLineBuilder(new RootCommand("Run an evergreen versi
         toolArgs,
         sourceOpt,
         intervalOpt,
+        quietOpt,
     })
     .UseHelpBuilder(context => new ToolHelpBuilder(context.Console))
     .UseHelp()
@@ -53,10 +54,13 @@ if (string.IsNullOrEmpty(tool))
 
 // Now that we know we have a tool command, strip the arguments *after* the tool 
 // and re-parse the options, just so we don't accidentally grab a tool option as ours.
-result = new Parser(sourceOpt, intervalOpt, helpOpt).Parse(arguments.Take(arguments.IndexOf(tool!)).ToArray());
+result = new Parser(sourceOpt, intervalOpt, quietOpt, helpOpt).Parse(arguments.Take(arguments.IndexOf(tool!)).ToArray());
 
 if (result.FindResultFor(helpOpt) != null)
     return ShowHelp();
+
+var quiet = result.FindResultFor(quietOpt) != null;
+var app = new Application(quiet);
 
 interval = result.ValueForOption(intervalOpt);
 source = result.ValueForOption(sourceOpt);
@@ -91,7 +95,7 @@ var process = app.Start(start, toolCancellation);
 Timer? timer = null;
 timer = new Timer(_ => CheckUpdates(), default, TimeSpan.FromSeconds((double)interval), TimeSpan.FromSeconds((double)interval));
 
-if (!app.ShutdownToken.IsCancellationRequested)
+if (!app.ShutdownToken.IsCancellationRequested && !quiet)
     AnsiConsole.MarkupLine("[grey]Press Ctrl+C to exit.[/]");
 
 while (!app.ShutdownToken.IsCancellationRequested)
@@ -110,7 +114,9 @@ void CheckUpdates()
             var update = await tools.FindUpdateAsync(info.PackageId, info.Version, source!);
             if (update != null)
             {
-                AnsiConsole.MarkupLine($"[yellow]Update v{update.ToNormalizedString()} found.[/]");
+                if (!quiet)
+                    AnsiConsole.MarkupLine($"[yellow]Update v{update.ToNormalizedString()} found.[/]");
+
                 // Causes the running tool to be stopped while we update. See Application.Start.
                 toolCancellation.Cancel();
 

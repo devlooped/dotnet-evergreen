@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
 using Spectre.Console;
 
@@ -10,16 +9,22 @@ namespace Devlooped
     class Application
     {
         readonly CancellationTokenSource shutdownSource = new CancellationTokenSource();
+        readonly bool quiet;
         bool stoppingChildProcess = false;
 
         public CancellationToken ShutdownToken => shutdownSource.Token;
 
-        public Application() => Console.CancelKeyPress += (s, e) => e.Cancel = OnCancelKeyPress();
+        public Application(bool quiet = false)
+        {
+            this.quiet = quiet;
+            Console.CancelKeyPress += (s, e) => e.Cancel = OnCancelKeyPress();
+        }
 
         public Process Start(ProcessStartInfo start, CancellationTokenSource cancellation)
         {
             var process = Process.Start(start);
-            AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)}:{process!.Id} Started[/]");
+            if (!quiet)
+                AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)}:{process!.Id} Started[/]");
 
             process!.EnableRaisingEvents = true;
             var cancelled = false;
@@ -56,19 +61,22 @@ namespace Devlooped
 
             process.Exited += (s, e) =>
             {
-                if (!cancelled)
+                if (!quiet)
                 {
-                    if (process.ExitCode == 0)
-                        AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)} Exited[/]");
+                    if (!cancelled)
+                    {
+                        if (process.ExitCode == 0)
+                            AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)} Exited[/]");
+                        else
+                            AnsiConsole.MarkupLine($"[red]{Path.GetFileNameWithoutExtension(start.FileName)} Exited[/]");
+                    }
                     else
-                        AnsiConsole.MarkupLine($"[red]{Path.GetFileNameWithoutExtension(start.FileName)} Exited[/]");
-                }
-                else
-                {
-                    if (ShutdownToken.IsCancellationRequested)
-                        AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)} Shutdown[/]");
-                    else
-                        AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)} Restarting[/]");
+                    {
+                        if (ShutdownToken.IsCancellationRequested)
+                            AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)} Shutdown[/]");
+                        else
+                            AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)} Restarting[/]");
+                    }
                 }
 
                 // If the tool exits with an error, exit the application too,
@@ -91,7 +99,9 @@ namespace Devlooped
             // process ourselves (i.e. a Ctrl+C is actually entered manually by the user).
             if (!stoppingChildProcess)
             {
-                AnsiConsole.MarkupLine("[yellow]Shutting down...[/]");
+                if (!quiet)
+                    AnsiConsole.MarkupLine("[yellow]Shutting down...[/]");
+
                 shutdownSource.Cancel();
             }
 
