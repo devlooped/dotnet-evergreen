@@ -1,5 +1,9 @@
 
 
+## [v1.0.0-rc](https://github.com/devlooped/dotnet-evergreen/tree/v1.0.0-rc) (2021-07-21)
+
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.0.0-beta...v1.0.0-rc)
+
 ## [v1.0.0-beta](https://github.com/devlooped/dotnet-evergreen/tree/v1.0.0-beta) (2021-07-21)
 
 [Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/e24711c6b7dff84d1f75ce3eca12296d36197096...v1.0.0-beta)
