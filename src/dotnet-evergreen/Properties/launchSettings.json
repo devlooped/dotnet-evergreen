@@ -2,7 +2,7 @@
   "profiles": {
     "dotnet-evergreen": {
       "commandName": "Project",
-      "commandLineArgs": "dotnet-tor"
+      "commandLineArgs": "-?"
       //"commandLineArgs": "dotnet-echo"
     },
     "WSL 2": {

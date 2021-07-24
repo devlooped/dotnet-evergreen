@@ -18,24 +18,34 @@ namespace Devlooped
     {
         public const string DefaultPackageFeed = "https://api.nuget.org/v3/index.json";
 
-        public static bool TryCreate(out Tools? tools)
+        public static bool TryCreate(string packageFeed, out Tools? tools)
         {
             tools = default;
             var dotnet = DotnetMuxer.Path?.FullName;
             if (dotnet == null)
                 return false;
 
-            tools = new Tools(dotnet);
+            tools = new Tools(dotnet, packageFeed);
             return true;
         }
 
         readonly string dotnet;
+        readonly string packageFeed;
+        readonly string feedArg = "";
 
-        public Tools(string dotnet) => this.dotnet = dotnet;
+        public Tools(string dotnet, string packageFeed = DefaultPackageFeed)
+        {
+            this.dotnet = dotnet;
+            this.packageFeed = packageFeed;
+            if (packageFeed != DefaultPackageFeed)
+                feedArg = "--add-source " + packageFeed + " ";
+        }
+
+        public string DotNetPath => dotnet;
 
         public List<Tool> Installed { get; private set; } = new List<Tool>();
 
-        public async Task<NuGetVersion?> FindUpdateAsync(string packageId, NuGetVersion localVersion, string packageFeed = DefaultPackageFeed)
+        public async Task<NuGetVersion?> FindUpdateAsync(string packageId, NuGetVersion localVersion)
         {
             var providers = Repository.Provider.GetCoreV3();
             var repository = new SourceRepository(new PackageSource(packageFeed), providers);
@@ -53,12 +63,12 @@ namespace Devlooped
         }
 
         public bool Install(string packageId)
-            => Process.Start(dotnet, "tool install -g " + packageId).WaitForExitCode() == 0 && Refresh();
+            => Process.Start(dotnet, "tool install -g " + feedArg + packageId).WaitForExitCode() == 0 && Refresh();
 
         public bool Update(string packageId)
-            => Process.Start(dotnet, "tool update -g " + packageId).WaitForExitCode() == 0 && Refresh();
+            => Process.Start(dotnet, "tool update -g " + feedArg + packageId).WaitForExitCode() == 0 && Refresh();
 
-        public async Task<bool> InstallOrUpdateAsync(string packageId, string packageFeed = DefaultPackageFeed)
+        public async Task<bool> InstallOrUpdateAsync(string packageId)
         {
             // We only refresh if list is empty.
             if (Installed.Count == 0)
@@ -71,7 +81,7 @@ namespace Devlooped
                 if (!Install(packageId))
                     return false;
             }
-            else if (await FindUpdateAsync(packageId, tool.Version, packageFeed) != null)
+            else if (await FindUpdateAsync(packageId, tool.Version) != null)
             {
                 if (!Update(packageId))
                     return false;

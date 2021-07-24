@@ -65,11 +65,11 @@ var app = new Application(quiet);
 interval = result.ValueForOption(intervalOpt);
 source = result.ValueForOption(sourceOpt);
 
-if (!Tools.TryCreate(out var tools) || tools == null)
+if (!Tools.TryCreate(source!, out var tools) || tools == null)
     return Error("Failed to locate dotnet");
 
-// Ensure dotnet-stop is installed
-if (!await tools.InstallOrUpdateAsync("dotnet-stop"))
+// Ensure dotnet-stop is installed, from default source
+if (!await new Tools(tools.DotNetPath).InstallOrUpdateAsync("dotnet-stop"))
     // Whatever tool install/update error would have already been written to output at this point.
     return Exit();
 
@@ -111,7 +111,7 @@ void CheckUpdates()
     {
         Task.Run(async () =>
         {
-            var update = await tools.FindUpdateAsync(info.PackageId, info.Version, source!);
+            var update = await tools.FindUpdateAsync(info.PackageId, info.Version);
             if (update != null)
             {
                 if (!quiet)
