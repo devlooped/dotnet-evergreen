@@ -1,5 +1,13 @@
 
 
+## [v1.0.3](https://github.com/devlooped/dotnet-evergreen/tree/v1.0.3) (2021-07-24)
+
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.0.2...v1.0.3)
+
+:sparkles: Implemented enhancements:
+
+- Show progress while installing/updating tools [\#7](https://github.com/devlooped/dotnet-evergreen/issues/7)
+
 ## [v1.0.2](https://github.com/devlooped/dotnet-evergreen/tree/v1.0.2) (2021-07-24)
 
 [Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.0.1...v1.0.2)
