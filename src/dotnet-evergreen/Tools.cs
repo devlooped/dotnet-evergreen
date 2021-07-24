@@ -8,6 +8,7 @@ using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
+using Spectre.Console;
 using static Devlooped.Extensions;
 
 namespace Devlooped
@@ -18,24 +19,26 @@ namespace Devlooped
     {
         public const string DefaultPackageFeed = "https://api.nuget.org/v3/index.json";
 
-        public static bool TryCreate(string packageFeed, out Tools? tools)
+        public static bool TryCreate(string packageFeed, bool quiet, out Tools? tools)
         {
             tools = default;
             var dotnet = DotnetMuxer.Path?.FullName;
             if (dotnet == null)
                 return false;
 
-            tools = new Tools(dotnet, packageFeed);
+            tools = new Tools(dotnet, quiet, packageFeed);
             return true;
         }
 
         readonly string dotnet;
+        readonly bool quiet;
         readonly string packageFeed;
         readonly string feedArg = "";
 
-        public Tools(string dotnet, string packageFeed = DefaultPackageFeed)
+        public Tools(string dotnet, bool quiet, string packageFeed = DefaultPackageFeed)
         {
             this.dotnet = dotnet;
+            this.quiet = quiet;
             this.packageFeed = packageFeed;
             if (packageFeed != DefaultPackageFeed)
                 feedArg = "--add-source " + packageFeed + " ";
@@ -63,12 +66,12 @@ namespace Devlooped
         }
 
         public bool Install(string packageId)
-            => Process.Start(dotnet, "tool install -g --no-cache " + feedArg + packageId).WaitForExitCode() == 0 && Refresh();
+            => RunToolCommand("tool install -g --no-cache " + feedArg + packageId, "Installing " + packageId);
 
         public bool Update(string packageId)
-            => Process.Start(dotnet, "tool update -g --no-cache " + feedArg + packageId).WaitForExitCode() == 0 && Refresh();
+            => RunToolCommand("tool update -g --no-cache " + feedArg + packageId, "Updating " + packageId);
 
-        public async Task<bool> InstallOrUpdateAsync(string packageId)
+        public async Task<bool> InstallOrUpdateAsync(string packageId, bool firstRun = false)
         {
             // We only refresh if list is empty.
             if (Installed.Count == 0)
@@ -83,6 +86,15 @@ namespace Devlooped
             }
             else if (await FindUpdateAsync(packageId, tool.Version) != null)
             {
+#if DEBUG
+                // Don't apply first immediate update when running with the 
+                // debugger attached. Useful for locally testing the update 
+                // scenario, by installing an older version of a tool and running 
+                // with the debugger attached. Will run the tool, check for updates, 
+                // stop it and restart it.
+                if (Debugger.IsAttached && firstRun)
+                    return true;
+#endif
                 if (!Update(packageId))
                     return false;
             }
@@ -98,6 +110,30 @@ namespace Devlooped
             Installed = ParseTools(output);
             return true;
         }
+
+        bool RunToolCommand(string command, string status)
+        {
+            string? output = null;
+            string? error = null;
+
+            var info = new ProcessStartInfo(dotnet, command)
+            {
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+            };
+
+            var exitCode = AnsiConsole.Status().Start(status, _ =>
+                Process.Start(info).WaitForExitCode(out output, out error) == 0 && Refresh());
+
+            if (!quiet && output != null)
+                AnsiConsole.Render(new Paragraph(output, new Style(Color.Green)));
+
+            if (!quiet && !string.IsNullOrEmpty(error))
+                AnsiConsole.Render(new Paragraph(error, new Style(Color.Red)));
+
+            return exitCode;
+        }
+
 
         static List<Tool> ParseTools(string output) => output
             .Split(Environment.NewLine)

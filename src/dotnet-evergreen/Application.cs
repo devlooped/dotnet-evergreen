@@ -46,7 +46,7 @@ namespace Devlooped
                             CreateNoWindow = true,
                             WindowStyle = ProcessWindowStyle.Hidden,
                             UseShellExecute = true,
-                        }).WaitForExitCode() != 0 &&
+                        }).WaitForExitCode(out _, out _) != 0 &&
                         !process.HasExited)
                         process.Kill();
                 }

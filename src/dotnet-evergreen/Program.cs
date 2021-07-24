@@ -65,15 +65,15 @@ var app = new Application(quiet);
 interval = result.ValueForOption(intervalOpt);
 source = result.ValueForOption(sourceOpt);
 
-if (!Tools.TryCreate(source!, out var tools) || tools == null)
+if (!Tools.TryCreate(source!, quiet, out var tools) || tools == null)
     return Error("Failed to locate dotnet");
 
 // Ensure dotnet-stop is installed, from default source
-if (!await new Tools(tools.DotNetPath).InstallOrUpdateAsync("dotnet-stop"))
+if (!await new Tools(tools.DotNetPath, quiet).InstallOrUpdateAsync("dotnet-stop"))
     // Whatever tool install/update error would have already been written to output at this point.
     return Exit();
 
-if (!await tools.InstallOrUpdateAsync(tool!))
+if (!await tools.InstallOrUpdateAsync(tool!, firstRun: true))
     return Exit();
 
 var info = tools.Installed.First(x => x.PackageId == tool);
@@ -119,6 +119,13 @@ void CheckUpdates()
 
                 // Causes the running tool to be stopped while we update. See Application.Start.
                 toolCancellation.Cancel();
+
+                // Make sure we don't trigger update until process is entirely gone.
+                if (!process.HasExited)
+                    process.WaitForExit(5000);
+
+                if (!process.HasExited)
+                    process.Kill();
 
                 if (!tools.Update(tool!))
                     return Exit($"Failed to update {tool}");

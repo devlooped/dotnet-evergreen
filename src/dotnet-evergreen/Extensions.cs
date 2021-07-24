@@ -23,10 +23,23 @@ namespace Devlooped
             return exitCode;
         }
 
-        public static int WaitForExitCode(this Process? process)
+        public static int WaitForExitCode(this Process? process, out string? output, out string? error)
         {
-            process?.WaitForExit();
-            return process?.ExitCode ?? 0;
+            output = null;
+            error = null;
+
+            if (process == null)
+                return 0;
+
+            process.WaitForExit();
+
+            if (process.StartInfo.RedirectStandardOutput)
+                output = process.StandardOutput.ReadToEnd();
+
+            if (process.StartInfo.RedirectStandardError)
+                error = process.StandardError.ReadToEnd();
+
+            return process.ExitCode;
         }
 
         public static bool TryExecute(string program, string arguments, out string output)
