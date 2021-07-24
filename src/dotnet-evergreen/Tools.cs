@@ -63,10 +63,10 @@ namespace Devlooped
         }
 
         public bool Install(string packageId)
-            => Process.Start(dotnet, "tool install -g " + feedArg + packageId).WaitForExitCode() == 0 && Refresh();
+            => Process.Start(dotnet, "tool install -g --no-cache " + feedArg + packageId).WaitForExitCode() == 0 && Refresh();
 
         public bool Update(string packageId)
-            => Process.Start(dotnet, "tool update -g " + feedArg + packageId).WaitForExitCode() == 0 && Refresh();
+            => Process.Start(dotnet, "tool update -g --no-cache " + feedArg + packageId).WaitForExitCode() == 0 && Refresh();
 
         public async Task<bool> InstallOrUpdateAsync(string packageId)
         {
