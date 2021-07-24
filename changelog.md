@@ -1,5 +1,21 @@
 
 
+## [v1.0.2](https://github.com/devlooped/dotnet-evergreen/tree/v1.0.2) (2021-07-24)
+
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.0.1...v1.0.2)
+
+:sparkles: Implemented enhancements:
+
+- When installing/updating, don't use cache [\#6](https://github.com/devlooped/dotnet-evergreen/issues/6)
+
+:bug: Fixed bugs:
+
+- Package source not used when installing/updating [\#5](https://github.com/devlooped/dotnet-evergreen/issues/5)
+
+:hammer: Other:
+
+- Video of dotnet-evergreen in action [\#4](https://github.com/devlooped/dotnet-evergreen/issues/4)
+
 ## [v1.0.1](https://github.com/devlooped/dotnet-evergreen/tree/v1.0.1) (2021-07-21)
 
 [Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.0.0...v1.0.1)
