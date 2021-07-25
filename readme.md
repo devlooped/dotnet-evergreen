@@ -4,8 +4,7 @@
 [![Version](https://img.shields.io/nuget/v/dotnet-evergreen.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-evergreen) [![Downloads](https://img.shields.io/nuget/dt/dotnet-evergreen.svg?color=green)](https://www.nuget.org/packages/dotnet-evergreen) [![License](https://img.shields.io/github/license/devlooped/dotnet-evergreen.svg?color=blue)](https://github.com/devlooped/dotnet-evergreen/blob/main/license.txt) [![Build](https://github.com/devlooped/dotnet-evergreen/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/dotnet-evergreen/actions)
 
 A dotnet global tool runner that automatically updates the tool package before running it, 
-automatically checks for updates while it runs, and restarts the tool as needed after 
-updating it.
+checks for updates while it runs, and restarts the tool as needed after updating it.
 
 ```
 dotnet evergreen
@@ -31,7 +30,7 @@ Features:
 
 * Automatically exits if the tool also runs to completion
 * Forwards exit code from the tool
-* Automatically restarts tool to apply updates
+* Restarts tool as needed to apply updates
 * Passes all tool options verbatim (except for `evergreen` options, specified *before* the tool argument)
 * Automatically discovers tool *command* when it doesn't match the tool *package id* 
   (i.e. [dotnet-eventgrid](https://www.nuget.org/packages/dotnet-eventgrid) > `eventgrid`).

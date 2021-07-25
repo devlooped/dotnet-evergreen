@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>
-      A dotnet global tool runner that automatically updates the tool package before running it, automatically checks for updates while it runs, and restarts the tool as needed after updating it.
+      A dotnet global tool runner that automatically updates the tool package before running it, checks for updates while it runs, and restarts the tool as needed after updating it.
     </Description>
 
     <OutputType>Exe</OutputType>
