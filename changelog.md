@@ -1,5 +1,13 @@
 
 
+## [v1.0.4](https://github.com/devlooped/dotnet-evergreen/tree/v1.0.4) (2021-08-17)
+
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.0.3...v1.0.4)
+
+:bug: Fixed bugs:
+
+- Usage of  local source cache prevents accurate update checks [\#13](https://github.com/devlooped/dotnet-evergreen/issues/13)
+
 ## [v1.0.3](https://github.com/devlooped/dotnet-evergreen/tree/v1.0.3) (2021-07-24)
 
 [Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.0.2...v1.0.3)
