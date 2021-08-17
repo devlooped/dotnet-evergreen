@@ -53,7 +53,13 @@ namespace Devlooped
             var providers = Repository.Provider.GetCoreV3();
             var repository = new SourceRepository(new PackageSource(packageFeed), providers);
             var resource = await repository.GetResourceAsync<PackageMetadataResource>().ConfigureAwait(false);
-            var metadata = await resource.GetMetadataAsync(packageId, false, false, new SourceCacheContext(), NullLogger.Instance, CancellationToken.None).ConfigureAwait(false);
+            var metadata = await resource.GetMetadataAsync(packageId, false, false,
+                new SourceCacheContext
+                {
+                    NoCache = true,
+                    RefreshMemoryCache = true,
+                },
+                NullLogger.Instance, CancellationToken.None).ConfigureAwait(false);
 
             var update = metadata
                 .Select(x => x.Identity)
