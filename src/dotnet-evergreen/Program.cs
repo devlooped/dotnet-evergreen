@@ -28,11 +28,12 @@ var toolArgs = new Argument<string[]>("args", "Additional arguments and options 
 var sourceOpt = new Option<string>(new[] { "-s", "--source", "/s", "/source" }, () => source, "NuGet feed to check for updates.");
 var intervalOpt = new Option<int>(new[] { "-i", "--interval", "/i", "/interval" }, () => interval.GetValueOrDefault(5), "Time interval in seconds for the update checks.");
 var forceOpt = new Option<bool>(new[] { "-f", "--force", "/f", "/force" }, () => config.GetBoolean("force") ?? true, "Stop all running tool processes to apply updates.");
+var singletonOpt = new Option("--singleton", "Ensure a single tool process is running.");
 var quietOpt = new Option(new[] { "-q", "--quiet", "/q", "/quiet" }, "Do not display any informational messages.");
 var helpOpt = new Option(new[] { "-h", "/h", "--help", "-?", "/?" });
 
 // First do full parse to detect tool/source
-var parser = new Parser(toolArg, toolArgs, intervalOpt, sourceOpt, forceOpt, quietOpt, helpOpt);
+var parser = new Parser(toolArg, toolArgs, sourceOpt, singletonOpt, intervalOpt, forceOpt, quietOpt, helpOpt);
 var result = parser.Parse(args);
 var tool = result.ValueForArgument(toolArg);
 
@@ -41,6 +42,7 @@ int ShowHelp() => new CommandLineBuilder(new RootCommand("Run an evergreen versi
         toolArg,
         toolArgs,
         sourceOpt,
+        singletonOpt,
         intervalOpt,
         forceOpt,
         quietOpt,
@@ -62,6 +64,7 @@ if (result.FindResultFor(helpOpt) != null)
     return ShowHelp();
 
 var quiet = result.FindResultFor(quietOpt) != null;
+var singleton = result.FindResultFor(singletonOpt) != null;
 var force = result.ValueForOption(forceOpt);
 var app = new Application(quiet);
 
@@ -92,7 +95,7 @@ if (!File.Exists(command))
 // From index of command forward, pass it on as-is to the tool.
 var start = new ProcessStartInfo(command, string.Join(' ', arguments.Skip(arguments.IndexOf(tool!) + 1)));
 var toolCancellation = new CancellationTokenSource();
-var process = app.Start(start, toolCancellation);
+var process = app.Start(start, toolCancellation, singleton);
 
 // Declare first so we can use it in CheckUpdates
 Timer? timer = null;
@@ -133,7 +136,7 @@ void CheckUpdates()
                 // Restart the updated tool.
                 start = new ProcessStartInfo(info.Commands, string.Join(' ', arguments.Skip(arguments.IndexOf(tool!) + 1)));
                 toolCancellation = new CancellationTokenSource();
-                process = app.Start(start, toolCancellation);
+                process = app.Start(start, toolCancellation, singleton);
             }
             return 0;
         }).Wait();

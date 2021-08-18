@@ -20,8 +20,15 @@ namespace Devlooped
             Console.CancelKeyPress += (s, e) => e.Cancel = OnCancelKeyPress();
         }
 
-        public Process Start(ProcessStartInfo start, CancellationTokenSource cancellation)
+        public Process Start(ProcessStartInfo start, CancellationTokenSource cancellation, bool singleton)
         {
+            if (singleton)
+            {
+                var name = Path.GetFileNameWithoutExtension(start.FileName);
+                foreach (var existing in Process.GetProcessesByName(name))
+                    existing.Stop(2000);
+            }
+
             var process = Process.Start(start);
             if (!quiet)
                 AnsiConsole.MarkupLine($"[grey]{Path.GetFileNameWithoutExtension(start.FileName)}:{process!.Id} Started[/]");
