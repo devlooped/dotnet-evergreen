@@ -1,5 +1,14 @@
 
 
+## [v1.1.0](https://github.com/devlooped/dotnet-evergreen/tree/v1.1.0) (2021-08-18)
+
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.0.4...v1.1.0)
+
+:sparkles: Implemented enhancements:
+
+- Allow specifying a tool should be a singleton when run [\#15](https://github.com/devlooped/dotnet-evergreen/issues/15)
+- If tool to update is running, update fails and evergreen exits [\#14](https://github.com/devlooped/dotnet-evergreen/issues/14)
+
 ## [v1.0.4](https://github.com/devlooped/dotnet-evergreen/tree/v1.0.4) (2021-08-17)
 
 [Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.0.3...v1.0.4)
