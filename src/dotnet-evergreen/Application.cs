@@ -38,17 +38,7 @@ namespace Devlooped
                 stoppingChildProcess = true;
                 try
                 {
-                    if (!process.HasExited &&
-                        Process.Start(new ProcessStartInfo(DotnetMuxer.Path!.FullName, $"stop {process.Id} -t 2000 -q")
-                        {
-                            // Avoid the output of the dotnet-stop tool from polluting ours, since we'll kill the 
-                            // process if it doesn't exit cleanly anyway and we're getting output from it already.
-                            CreateNoWindow = true,
-                            WindowStyle = ProcessWindowStyle.Hidden,
-                            UseShellExecute = true,
-                        }).WaitForExitCode(out _, out _) != 0 &&
-                        !process.HasExited)
-                        process.Kill();
+                    process.Stop(2000);
                 }
                 finally
                 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
@@ -74,10 +75,31 @@ namespace Devlooped
         public bool Install(string packageId)
             => RunToolCommand("tool install -g --no-cache " + feedArg + packageId, "Installing " + packageId);
 
-        public bool Update(string packageId)
-            => RunToolCommand("tool update -g --no-cache " + feedArg + packageId, "Updating " + packageId);
+        public bool Update(string packageId, bool force)
+        {
+            if (RunToolCommand("tool update -g --no-cache " + feedArg + packageId, "Updating " + packageId))
+                return true;
+            else if (!force)
+                return false;
 
-        public async Task<bool> InstallOrUpdateAsync(string packageId, bool firstRun = false)
+
+            if (Installed.FirstOrDefault(x => x.PackageId == packageId) is var tool && tool != null)
+            {
+                // Otherwise, lookup all running tools, stop them all, and retry update.
+                var executable = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                    ? tool.Commands + ".exe" : tool.Commands;
+
+                foreach (var process in Process.GetProcessesByName(executable))
+                    process.Stop(2000);
+
+                // Retry once more.
+                return RunToolCommand("tool update -g --no-cache " + feedArg + packageId, "Updating " + packageId);
+            }
+
+            return false;
+        }
+
+        public async Task<bool> InstallOrUpdateAsync(string packageId, bool firstRun = false, bool force = false)
         {
             // We only refresh if list is empty.
             if (Installed.Count == 0)
@@ -101,7 +123,7 @@ namespace Devlooped
                 if (Debugger.IsAttached && firstRun)
                     return true;
 #endif
-                if (!Update(packageId))
+                if (!Update(packageId, force))
                     return false;
             }
 

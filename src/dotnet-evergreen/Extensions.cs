@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using Spectre.Console;
 
 namespace Devlooped
@@ -21,6 +19,27 @@ namespace Devlooped
 
             Environment.Exit(exitCode);
             return exitCode;
+        }
+
+        /// <summary>
+        /// Runs "dotnet stop {process.Id} -t {timeout} -q"
+        /// </summary>
+        public static void Stop(this Process? process, int timeout)
+        {
+            if (process != null &&
+                !process.HasExited &&
+                !Process.Start(new ProcessStartInfo(DotnetMuxer.Path!.FullName, $"stop {process.Id} -t {timeout} -q")
+                {
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    // Avoid the output of the dotnet-stop tool from polluting ours, since we'll kill the 
+                    // process if it doesn't exit cleanly anyway and we're getting output from it already.
+                    UseShellExecute = true,
+                })?.WaitForExit(timeout) != true &&
+                !process.HasExited)
+            {
+                process.Kill();
+            }
         }
 
         public static int WaitForExitCode(this Process? process, out string? output, out string? error)

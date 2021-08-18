@@ -27,11 +27,12 @@ var toolArg = new Argument<string>("tool", "Package Id of tool to run.");
 var toolArgs = new Argument<string[]>("args", "Additional arguments and options supported by the tool");
 var sourceOpt = new Option<string>(new[] { "-s", "--source", "/s", "/source" }, () => source, "NuGet feed to check for updates.");
 var intervalOpt = new Option<int>(new[] { "-i", "--interval", "/i", "/interval" }, () => interval.GetValueOrDefault(5), "Time interval in seconds for the update checks.");
+var forceOpt = new Option<bool>(new[] { "-f", "--force", "/f", "/force" }, () => config.GetBoolean("force") ?? true, "Stop all running tool processes to apply updates.");
 var quietOpt = new Option(new[] { "-q", "--quiet", "/q", "/quiet" }, "Do not display any informational messages.");
 var helpOpt = new Option(new[] { "-h", "/h", "--help", "-?", "/?" });
 
 // First do full parse to detect tool/source
-var parser = new Parser(toolArg, toolArgs, intervalOpt, sourceOpt, quietOpt, helpOpt);
+var parser = new Parser(toolArg, toolArgs, intervalOpt, sourceOpt, forceOpt, quietOpt, helpOpt);
 var result = parser.Parse(args);
 var tool = result.ValueForArgument(toolArg);
 
@@ -41,6 +42,7 @@ int ShowHelp() => new CommandLineBuilder(new RootCommand("Run an evergreen versi
         toolArgs,
         sourceOpt,
         intervalOpt,
+        forceOpt,
         quietOpt,
     })
     .UseHelpBuilder(context => new ToolHelpBuilder(context.Console))
@@ -60,6 +62,7 @@ if (result.FindResultFor(helpOpt) != null)
     return ShowHelp();
 
 var quiet = result.FindResultFor(quietOpt) != null;
+var force = result.ValueForOption(forceOpt);
 var app = new Application(quiet);
 
 interval = result.ValueForOption(intervalOpt);
@@ -73,7 +76,7 @@ if (!await new Tools(tools.DotNetPath, quiet).InstallOrUpdateAsync("dotnet-stop"
     // Whatever tool install/update error would have already been written to output at this point.
     return Exit();
 
-if (!await tools.InstallOrUpdateAsync(tool!, firstRun: true))
+if (!await tools.InstallOrUpdateAsync(tool!, firstRun: true, force: force))
     return Exit();
 
 var info = tools.Installed.First(x => x.PackageId == tool);
@@ -121,13 +124,9 @@ void CheckUpdates()
                 toolCancellation.Cancel();
 
                 // Make sure we don't trigger update until process is entirely gone.
-                if (!process.HasExited)
-                    process.WaitForExit(5000);
+                process.Stop(5000);
 
-                if (!process.HasExited)
-                    process.Kill();
-
-                if (!tools.Update(tool!))
+                if (!tools.Update(tool!, force: force))
                     return Exit($"Failed to update {tool}");
 
                 info = tools.Installed.First(x => x.Commands == tool || x.PackageId == tool);

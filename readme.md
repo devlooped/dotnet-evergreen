@@ -20,6 +20,7 @@ Arguments:
 Options:
   -s, --source <source>      NuGet feed to check for updates. [default: https://api.nuget.org/v3/index.json]
   -i, --interval <interval>  Time interval in seconds for the update checks. [default: 5]
+  -f, --force                Stop all running tool processes to apply updates. [default: True]
   -q, --quiet                Do not display any informational messages.
   -?, -h, --help             Show help and usage information
   --version                  Show version information
@@ -31,6 +32,8 @@ Features:
 * Automatically exits if the tool also runs to completion
 * Forwards exit code from the tool
 * Restarts tool as needed to apply updates
+* Optionally stops all other tool running processes (for the same package id) before 
+  applying updates (`-f` option, to avoid errors when updating a running tool).
 * Passes all tool options verbatim (except for `evergreen` options, specified *before* the tool argument)
 * Automatically discovers tool *command* when it doesn't match the tool *package id* 
   (i.e. [dotnet-eventgrid](https://www.nuget.org/packages/dotnet-eventgrid) > `eventgrid`).
