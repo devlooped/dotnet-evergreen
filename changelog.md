@@ -1,20 +1,18 @@
 # Changelog
 
-## [v1.2.0-beta](https://github.com/devlooped/dotnet-evergreen/tree/v1.2.0-beta) (2022-03-06)
+## [v1.2.0](https://github.com/devlooped/dotnet-evergreen/tree/v1.2.0) (2022-03-06)
 
-[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.2.0-alpha...v1.2.0-beta)
-
-:hammer: Other:
-
-- Target latest supported .NET runtimes: 3.1, 5.0 and 6.0 [\#27](https://github.com/devlooped/dotnet-evergreen/issues/27)
-
-## [v1.2.0-alpha](https://github.com/devlooped/dotnet-evergreen/tree/v1.2.0-alpha) (2022-03-06)
-
-[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.1.0...v1.2.0-alpha)
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.1.0...v1.2.0)
 
 :sparkles: Implemented enhancements:
 
+- Trim tool size by removing explicit .net6 [\#28](https://github.com/devlooped/dotnet-evergreen/issues/28)
+- Target latest supported .NET runtimes: 3.1, 5.0 and 6.0 [\#27](https://github.com/devlooped/dotnet-evergreen/issues/27)
 - Drop .netcore 2.1 [\#26](https://github.com/devlooped/dotnet-evergreen/issues/26)
+
+:twisted_rightwards_arrows: Merged:
+
+- Drop net6 since net5 can run on net6 runtime [\#29](https://github.com/devlooped/dotnet-evergreen/pull/29) (@kzu)
 
 ## [v1.1.0](https://github.com/devlooped/dotnet-evergreen/tree/v1.1.0) (2021-08-18)
 
