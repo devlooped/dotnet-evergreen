@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.2.0-beta](https://github.com/devlooped/dotnet-evergreen/tree/v1.2.0-beta) (2022-03-06)
+
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.2.0-alpha...v1.2.0-beta)
+
+:hammer: Other:
+
+- Target latest supported .NET runtimes: 3.1, 5.0 and 6.0 [\#27](https://github.com/devlooped/dotnet-evergreen/issues/27)
+
 ## [v1.2.0-alpha](https://github.com/devlooped/dotnet-evergreen/tree/v1.2.0-alpha) (2022-03-06)
 
 [Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.1.0...v1.2.0-alpha)
