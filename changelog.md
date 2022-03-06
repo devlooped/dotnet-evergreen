@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.2.0-alpha](https://github.com/devlooped/dotnet-evergreen/tree/v1.2.0-alpha) (2022-03-06)
+
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.1.0...v1.2.0-alpha)
+
+:sparkles: Implemented enhancements:
+
+- Drop .netcore 2.1 [\#26](https://github.com/devlooped/dotnet-evergreen/issues/26)
+
 ## [v1.1.0](https://github.com/devlooped/dotnet-evergreen/tree/v1.1.0) (2021-08-18)
 
 [Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.0.4...v1.1.0)
