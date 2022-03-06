@@ -6,7 +6,8 @@
     </Description>
 
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <TargetFramework Condition="'$(BuildingInsideVisualStudio)' == 'true'">net6.0</TargetFramework>
 
     <AssemblyName>evergreen</AssemblyName>
     <RootNamespace>Devlooped</RootNamespace>
