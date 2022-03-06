@@ -20,6 +20,8 @@
     <PackageTags>dotnet dotnet-tool</PackageTags>
 
     <PackageProjectUrl>https://clarius.org/dotnet-evergreen</PackageProjectUrl>
+
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
