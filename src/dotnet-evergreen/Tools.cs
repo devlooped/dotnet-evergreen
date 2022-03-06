@@ -139,6 +139,7 @@ namespace Devlooped
             return true;
         }
 
+        [Obsolete]
         bool RunToolCommand(string command, string status)
         {
             string? output = null;

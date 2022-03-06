@@ -6,6 +6,7 @@ namespace Devlooped
 {
     public static class Extensions
     {
+        [Obsolete]
         public static int Error(string message, int exitCode = -1)
         {
             AnsiConsole.Render(new Paragraph(message, new Style(Color.Red)));
