@@ -121,7 +121,10 @@ void CheckUpdates()
             if (update != null)
             {
                 if (!quiet)
+                {
+                    AnsiConsole.WriteLine();
                     AnsiConsole.MarkupLine($"[yellow]Update v{update.ToNormalizedString()} found.[/]");
+                }
 
                 // Causes the running tool to be stopped while we update. See Application.Start.
                 toolCancellation.Cancel();
