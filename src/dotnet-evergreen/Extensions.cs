@@ -8,7 +8,7 @@ namespace Devlooped
     {
         public static int Error(string message, int exitCode = -1)
         {
-            AnsiConsole.Render(new Paragraph(message, new Style(Color.Red)));
+            AnsiConsole.Write(new Paragraph(message, new Style(Color.Red)));
             return exitCode;
         }
 

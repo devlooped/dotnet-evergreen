@@ -139,7 +139,6 @@ namespace Devlooped
             return true;
         }
 
-        [Obsolete]
         bool RunToolCommand(string command, string status)
         {
             string? output = null;
@@ -155,10 +154,10 @@ namespace Devlooped
                 Process.Start(info).WaitForExitCode(out output, out error) == 0 && Refresh());
 
             if (!quiet && output != null)
-                AnsiConsole.Render(new Paragraph(output, new Style(Color.Green)));
+                AnsiConsole.Write(new Paragraph(output, new Style(Color.Green)));
 
             if (!quiet && !string.IsNullOrEmpty(error))
-                AnsiConsole.Render(new Paragraph(error, new Style(Color.Red)));
+                AnsiConsole.Write(new Paragraph(error, new Style(Color.Red)));
 
             return exitCode;
         }
