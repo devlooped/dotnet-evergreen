@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.2.1](https://github.com/devlooped/dotnet-evergreen/tree/v1.2.1) (2022-03-07)
+
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.2.0...v1.2.1)
+
+:twisted_rightwards_arrows: Merged:
+
+- Catch exceptions and warn on update check failure [\#31](https://github.com/devlooped/dotnet-evergreen/pull/31) (@kzu)
+
 ## [v1.2.0](https://github.com/devlooped/dotnet-evergreen/tree/v1.2.0) (2022-03-06)
 
 [Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.1.0...v1.2.0)
