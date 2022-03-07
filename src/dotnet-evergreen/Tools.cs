@@ -51,25 +51,34 @@ namespace Devlooped
 
         public async Task<NuGetVersion?> FindUpdateAsync(string packageId, NuGetVersion localVersion)
         {
-            var providers = Repository.Provider.GetCoreV3();
-            var repository = new SourceRepository(new PackageSource(packageFeed), providers);
-            var resource = await repository.GetResourceAsync<PackageMetadataResource>().ConfigureAwait(false);
-            var metadata = await resource.GetMetadataAsync(packageId, false, false,
-                new SourceCacheContext
-                {
-                    NoCache = true,
-                    RefreshMemoryCache = true,
-                },
-                NullLogger.Instance, CancellationToken.None).ConfigureAwait(false);
+            try
+            {
+                var providers = Repository.Provider.GetCoreV3();
+                var repository = new SourceRepository(new PackageSource(packageFeed), providers);
+                var resource = await repository.GetResourceAsync<PackageMetadataResource>().ConfigureAwait(false);
+                var metadata = await resource.GetMetadataAsync(packageId, false, false,
+                    new SourceCacheContext
+                    {
+                        NoCache = true,
+                        RefreshMemoryCache = true,
+                    },
+                    NullLogger.Instance, CancellationToken.None).ConfigureAwait(false);
 
-            var update = metadata
-                .Select(x => x.Identity)
-                .Where(x => x.Version > localVersion)
-                .OrderByDescending(x => x.Version)
-                .Select(x => x.Version)
-                .FirstOrDefault();
+                var update = metadata
+                    .Select(x => x.Identity)
+                    .Where(x => x.Version > localVersion)
+                    .OrderByDescending(x => x.Version)
+                    .Select(x => x.Version)
+                    .FirstOrDefault();
 
-            return update;
+                return update;
+
+            }
+            catch (Exception)
+            {
+                AnsiConsole.Write(new Paragraph("Failed to query repository for updates.", new Style(Color.Yellow)));
+                return null;
+            }
         }
 
         public bool Install(string packageId)
