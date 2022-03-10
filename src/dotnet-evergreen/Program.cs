@@ -34,7 +34,7 @@ var prereleaseOpt = new Option<bool>(new[] { "-p", "--prerelease", "/p", "/prere
 var helpOpt = new Option(new[] { "-h", "/h", "--help", "-?", "/?" });
 
 // First do full parse to detect tool/source
-var parser = new Parser(toolArg, toolArgs, sourceOpt, singletonOpt, intervalOpt, forceOpt, quietOpt, helpOpt);
+var parser = new Parser(toolArg, toolArgs, sourceOpt, singletonOpt, intervalOpt, forceOpt, quietOpt, prereleaseOpt, helpOpt);
 var result = parser.Parse(args);
 var tool = result.ValueForArgument(toolArg);
 
