@@ -22,6 +22,7 @@ Options:
   --singleton                Ensure a single tool process is running.
   -i, --interval <interval>  Time interval in seconds for the update checks. [default: 5]
   -f, --force                Stop all running tool processes to apply updates. [default: True]
+  -p, --prerelease           Whether to include pre-release packages. [default: False]
   -q, --quiet                Do not display any informational messages.
   -?, -h, --help             Show help and usage information
   --version                  Show version information
@@ -45,6 +46,7 @@ Features:
     interval = 5
     source = https://myfeed.com/index.json 
     singleton = true
+    prerelease = true
   ```
 
 

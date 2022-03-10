@@ -20,26 +20,28 @@ namespace Devlooped
     {
         public const string DefaultPackageFeed = "https://api.nuget.org/v3/index.json";
 
-        public static bool TryCreate(string packageFeed, bool quiet, out Tools? tools)
+        public static bool TryCreate(string packageFeed, bool quiet, bool prerelease, out Tools? tools)
         {
             tools = default;
             var dotnet = DotnetMuxer.Path?.FullName;
             if (dotnet == null)
                 return false;
 
-            tools = new Tools(dotnet, quiet, packageFeed);
+            tools = new Tools(dotnet, quiet, prerelease, packageFeed);
             return true;
         }
 
         readonly string dotnet;
         readonly bool quiet;
+        readonly bool prerelease;
         readonly string packageFeed;
         readonly string feedArg = "";
 
-        public Tools(string dotnet, bool quiet, string packageFeed = DefaultPackageFeed)
+        public Tools(string dotnet, bool quiet, bool prerelease, string packageFeed = DefaultPackageFeed)
         {
             this.dotnet = dotnet;
             this.quiet = quiet;
+            this.prerelease = prerelease;
             this.packageFeed = packageFeed;
             if (packageFeed != DefaultPackageFeed)
                 feedArg = "--add-source " + packageFeed + " ";
@@ -56,7 +58,7 @@ namespace Devlooped
                 var providers = Repository.Provider.GetCoreV3();
                 var repository = new SourceRepository(new PackageSource(packageFeed), providers);
                 var resource = await repository.GetResourceAsync<PackageMetadataResource>().ConfigureAwait(false);
-                var metadata = await resource.GetMetadataAsync(packageId, false, false,
+                var metadata = await resource.GetMetadataAsync(packageId, prerelease, false,
                     new SourceCacheContext
                     {
                         NoCache = true,

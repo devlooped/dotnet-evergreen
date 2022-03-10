@@ -30,6 +30,7 @@ var intervalOpt = new Option<int>(new[] { "-i", "--interval", "/i", "/interval" 
 var forceOpt = new Option<bool>(new[] { "-f", "--force", "/f", "/force" }, () => config.GetBoolean("force") ?? true, "Stop all running tool processes to apply updates.");
 var singletonOpt = new Option("--singleton", "Ensure a single tool process is running.");
 var quietOpt = new Option(new[] { "-q", "--quiet", "/q", "/quiet" }, "Do not display any informational messages.");
+var prereleaseOpt = new Option<bool>(new[] { "-p", "--prerelease", "/p", "/prerelease" }, () => config.GetBoolean("prerelease") ?? false, "Whether to include pre-release packages.");
 var helpOpt = new Option(new[] { "-h", "/h", "--help", "-?", "/?" });
 
 // First do full parse to detect tool/source
@@ -45,6 +46,7 @@ int ShowHelp() => new CommandLineBuilder(new RootCommand("Run an evergreen versi
         singletonOpt,
         intervalOpt,
         forceOpt,
+        prereleaseOpt,
         quietOpt,
     })
     .UseHelpBuilder(context => new ToolHelpBuilder(context.Console))
@@ -58,7 +60,7 @@ if (string.IsNullOrEmpty(tool))
 
 // Now that we know we have a tool command, strip the arguments *after* the tool 
 // and re-parse the options, just so we don't accidentally grab a tool option as ours.
-result = new Parser(sourceOpt, intervalOpt, quietOpt, helpOpt).Parse(arguments.Take(arguments.IndexOf(tool!)).ToArray());
+result = new Parser(sourceOpt, intervalOpt, quietOpt, prereleaseOpt, helpOpt).Parse(arguments.Take(arguments.IndexOf(tool!)).ToArray());
 
 if (result.FindResultFor(helpOpt) != null)
     return ShowHelp();
@@ -66,16 +68,17 @@ if (result.FindResultFor(helpOpt) != null)
 var quiet = result.FindResultFor(quietOpt) != null;
 var singleton = result.FindResultFor(singletonOpt) != null;
 var force = result.ValueForOption(forceOpt);
+var prerelease = result.ValueForOption(prereleaseOpt);
 var app = new Application(quiet);
 
 interval = result.ValueForOption(intervalOpt);
 source = result.ValueForOption(sourceOpt);
 
-if (!Tools.TryCreate(source!, quiet, out var tools) || tools == null)
+if (!Tools.TryCreate(source!, quiet, prerelease, out var tools) || tools == null)
     return Error("Failed to locate dotnet");
 
 // Ensure dotnet-stop is installed, from default source
-if (!await new Tools(tools.DotNetPath, quiet).InstallOrUpdateAsync("dotnet-stop"))
+if (!await new Tools(tools.DotNetPath, quiet, prerelease).InstallOrUpdateAsync("dotnet-stop"))
     // Whatever tool install/update error would have already been written to output at this point.
     return Exit();
 
