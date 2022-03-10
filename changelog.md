@@ -1,13 +1,16 @@
 # Changelog
 
-## [v1.3.0](https://github.com/devlooped/dotnet-evergreen/tree/v1.3.0) (2022-03-10)
+## [v1.2.2](https://github.com/devlooped/dotnet-evergreen/tree/v1.2.2) (2022-03-10)
 
-[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.2.1...v1.3.0)
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.2.1...v1.2.2)
 
 :sparkles: Implemented enhancements:
 
 - Add support for installing prerelease versions [\#33](https://github.com/devlooped/dotnet-evergreen/issues/33)
 - Failure to check updates causes the tool to exit [\#30](https://github.com/devlooped/dotnet-evergreen/issues/30)
+
+:twisted_rightwards_arrows: Merged:
+
 - Add support for installing prerelease versions [\#34](https://github.com/devlooped/dotnet-evergreen/pull/34) (@kzu)
 
 ## [v1.2.1](https://github.com/devlooped/dotnet-evergreen/tree/v1.2.1) (2022-03-07)
