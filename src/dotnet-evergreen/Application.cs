@@ -20,6 +20,8 @@ namespace Devlooped
             Console.CancelKeyPress += (s, e) => e.Cancel = OnCancelKeyPress();
         }
 
+        public void Stop() => shutdownSource.Cancel();
+
         public Process Start(ProcessStartInfo start, CancellationTokenSource cancellation, bool singleton)
         {
             if (singleton)
@@ -40,7 +42,7 @@ namespace Devlooped
             cancellation.Token.Register(() =>
             {
                 // Flag that the process is exiting due to a tool cancellation
-                // for an updating, so we don't cause the updater to exist below.
+                // for an updating, so we don't cause the updater to exit below.
                 cancelled = true;
                 stoppingChildProcess = true;
                 try

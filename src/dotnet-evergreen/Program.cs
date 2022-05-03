@@ -27,6 +27,7 @@ var toolArg = new Argument<string>("tool", "Package Id of tool to run.");
 var toolArgs = new Argument<string[]>("args", "Additional arguments and options supported by the tool");
 var sourceOpt = new Option<string>(new[] { "-s", "--source", "/s", "/source" }, () => source, "NuGet feed to check for updates.");
 var intervalOpt = new Option<int>(new[] { "-i", "--interval", "/i", "/interval" }, () => interval.GetValueOrDefault(5), "Time interval in seconds for the update checks.");
+var exitOpt = new Option<bool>(new[] { "-e", "--exit", "/e", "/exit" }, () => config.GetBoolean("exit") ?? true, "Automatically exit if tool exits.");
 var forceOpt = new Option<bool>(new[] { "-f", "--force", "/f", "/force" }, () => config.GetBoolean("force") ?? true, "Stop all running tool processes to apply updates.");
 var singletonOpt = new Option("--singleton", "Ensure a single tool process is running.");
 var quietOpt = new Option(new[] { "-q", "--quiet", "/q", "/quiet" }, "Do not display any informational messages.");
@@ -34,7 +35,7 @@ var prereleaseOpt = new Option<bool>(new[] { "-p", "--prerelease", "/p", "/prere
 var helpOpt = new Option(new[] { "-h", "/h", "--help", "-?", "/?" });
 
 // First do full parse to detect tool/source
-var parser = new Parser(toolArg, toolArgs, sourceOpt, singletonOpt, intervalOpt, forceOpt, quietOpt, prereleaseOpt, helpOpt);
+var parser = new Parser(toolArg, toolArgs, sourceOpt, singletonOpt, intervalOpt, exitOpt, forceOpt, quietOpt, prereleaseOpt, helpOpt);
 var result = parser.Parse(args);
 var tool = result.ValueForArgument(toolArg);
 
@@ -45,6 +46,7 @@ int ShowHelp() => new CommandLineBuilder(new RootCommand("Run an evergreen versi
         sourceOpt,
         singletonOpt,
         intervalOpt,
+        exitOpt,
         forceOpt,
         prereleaseOpt,
         quietOpt,
@@ -60,13 +62,14 @@ if (string.IsNullOrEmpty(tool))
 
 // Now that we know we have a tool command, strip the arguments *after* the tool 
 // and re-parse the options, just so we don't accidentally grab a tool option as ours.
-result = new Parser(sourceOpt, intervalOpt, quietOpt, prereleaseOpt, helpOpt).Parse(arguments.Take(arguments.IndexOf(tool!)).ToArray());
+result = new Parser(sourceOpt, singletonOpt, intervalOpt, exitOpt, forceOpt, quietOpt, prereleaseOpt, helpOpt).Parse(arguments.Take(arguments.IndexOf(tool!)).ToArray());
 
 if (result.FindResultFor(helpOpt) != null)
     return ShowHelp();
 
 var quiet = result.FindResultFor(quietOpt) != null;
 var singleton = result.FindResultFor(singletonOpt) != null;
+var exitOnToolExit = result.ValueForOption(exitOpt);
 var force = result.ValueForOption(forceOpt);
 var prerelease = result.ValueForOption(prereleaseOpt);
 var app = new Application(quiet);
@@ -99,6 +102,7 @@ if (!File.Exists(command))
 var start = new ProcessStartInfo(command, string.Join(' ', arguments.Skip(arguments.IndexOf(tool!) + 1)));
 var toolCancellation = new CancellationTokenSource();
 var process = app.Start(start, toolCancellation, singleton);
+process.Exited += OnToolExit;
 
 // Declare first so we can use it in CheckUpdates
 Timer? timer = null;
@@ -111,6 +115,15 @@ while (!app.ShutdownToken.IsCancellationRequested)
     Thread.Sleep(100);
 
 return Environment.ExitCode;
+
+void OnToolExit(object? sender, EventArgs args)
+{
+    if (exitOnToolExit)
+        app?.Stop();
+
+    if (process != null)
+        process.Exited -= OnToolExit;
+}
 
 void CheckUpdates()
 {
@@ -129,20 +142,32 @@ void CheckUpdates()
                     AnsiConsole.MarkupLine($"[yellow]Update v{update.ToNormalizedString()} found.[/]");
                 }
 
-                // Causes the running tool to be stopped while we update. See Application.Start.
-                toolCancellation.Cancel();
+                var exitOption = exitOnToolExit;
+                // Disable auto-exit while we update, since otherwise we'd never be able to apply updates
+                exitOnToolExit = false;
 
-                // Make sure we don't trigger update until process is entirely gone.
-                process.Stop(5000);
+                try
+                {
+                    // Causes the running tool to be stopped while we update. See Application.Start.
+                    toolCancellation.Cancel();
 
-                if (!tools.Update(tool!, force: force))
-                    return Exit($"Failed to update {tool}");
+                    // Make sure we don't trigger update until process is entirely gone.
+                    process.Stop(5000);
 
-                info = tools.Installed.First(x => x.Commands == tool || x.PackageId == tool);
-                // Restart the updated tool.
-                start = new ProcessStartInfo(info.Commands, string.Join(' ', arguments.Skip(arguments.IndexOf(tool!) + 1)));
-                toolCancellation = new CancellationTokenSource();
-                process = app.Start(start, toolCancellation, singleton);
+                    if (!tools.Update(tool!, force: force))
+                        return Exit($"Failed to update {tool}");
+
+                    info = tools.Installed.First(x => x.Commands == tool || x.PackageId == tool);
+                    // Restart the updated tool.
+                    start = new ProcessStartInfo(info.Commands, string.Join(' ', arguments.Skip(arguments.IndexOf(tool!) + 1)));
+                    toolCancellation = new CancellationTokenSource();
+                    process = app.Start(start, toolCancellation, singleton);
+                    process.Exited += OnToolExit;
+                }
+                finally
+                {
+                    exitOnToolExit = exitOption;
+                }
             }
             return 0;
         }).Wait();
