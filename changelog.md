@@ -1,8 +1,8 @@
 # Changelog
 
-## [v1.3.0](https://github.com/devlooped/dotnet-evergreen/tree/v1.3.0) (2022-05-03)
+## [v1.3.1](https://github.com/devlooped/dotnet-evergreen/tree/v1.3.1) (2022-05-04)
 
-[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.2.1...v1.3.0)
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.2.1...v1.3.1)
 
 :sparkles: Implemented enhancements:
 
