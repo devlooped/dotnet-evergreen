@@ -57,4 +57,4 @@ Examples:
 > dotnet evergreen dotnet-tor
 ```
 
-<!-- include docs/sponsors.md -->
+<!-- include docs/footer.md -->
