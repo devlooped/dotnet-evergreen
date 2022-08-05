@@ -59,6 +59,6 @@ Examples:
 
 ## Sponsors
 
-[![sponsored](https://raw.githubusercontent.com/devlooped/oss/main/assets/images/sponsors.svg)](https://github.com/sponsors/devlooped) [![clarius](https://raw.githubusercontent.com/clarius/branding/main/logo/byclarius.svg)](https://github.com/clarius)[![clarius](https://raw.githubusercontent.com/clarius/branding/main/logo/logo.svg)](https://github.com/clarius)
-
+<!-- include sponsors.md -->
+<br><br>
 *[get mentioned here too](https://github.com/sponsors/devlooped)!*
