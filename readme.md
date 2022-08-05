@@ -57,8 +57,4 @@ Examples:
 > dotnet evergreen dotnet-tor
 ```
 
-## Sponsors
-
-<!-- include sponsors.md -->
-<br><br>
-*[get mentioned here too](https://github.com/sponsors/devlooped)!*
+<!-- include docs/sponsors.md -->
