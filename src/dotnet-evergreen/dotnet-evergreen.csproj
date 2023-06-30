@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>
@@ -30,7 +30,7 @@
     <PackageReference Include="IsExternalInit" Version="1.0.3" PrivateAssets="all" />
     <PackageReference Include="Spectre.Console" Version="0.46.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
-    <PackageReference Include="NuGet.Protocol" Version="6.5.0" />
+    <PackageReference Include="NuGet.Protocol" Version="6.5.1" />
   </ItemGroup>
 
   <ItemGroup>
