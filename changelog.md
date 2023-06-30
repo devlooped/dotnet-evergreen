@@ -1,5 +1,19 @@
 # Changelog
 
+## [v1.3.2](https://github.com/devlooped/dotnet-evergreen/tree/v1.3.2) (2023-06-30)
+
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.3.1...v1.3.2)
+
+:bug: Fixed bugs:
+
+- Uploaded video doesn't work on gitpage [\#41](https://github.com/devlooped/dotnet-evergreen/issues/41)
+
+:twisted_rightwards_arrows: Merged:
+
+- +M▼ includes [\#54](https://github.com/devlooped/dotnet-evergreen/pull/54) (@github-actions[bot])
+- +M▼ includes [\#52](https://github.com/devlooped/dotnet-evergreen/pull/52) (@github-actions[bot])
+- +M▼ includes [\#48](https://github.com/devlooped/dotnet-evergreen/pull/48) (@github-actions[bot])
+
 ## [v1.3.1](https://github.com/devlooped/dotnet-evergreen/tree/v1.3.1) (2022-05-04)
 
 [Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.2.1...v1.3.1)
