@@ -4,25 +4,31 @@
 name: build
 on: 
   workflow_dispatch:
+    inputs:
+      configuration:
+        type: choice
+        description: Configuration
+        options: 
+        - Release
+        - Debug
   push:
     branches: [ main, dev, 'dev/*', 'feature/*', 'rel/*' ]
     paths-ignore:
       - changelog.md
-      - code-of-conduct.md
-      - security.md
-      - support.md
       - readme.md
   pull_request:
     types: [opened, synchronize, reopened]
 
 env:
   DOTNET_NOLOGO: true
-  VersionPrefix: 42.42.${{ github.run_number }}
-  VersionLabel: ${{ github.ref }}
   PackOnBuild: true
   GeneratePackageOnBuild: true
+  VersionPrefix: 42.42.${{ github.run_number }}
+  VersionLabel: ${{ github.ref }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  
+  MSBUILDTERMINALLOGGER: auto
+  Configuration: ${{ github.event.inputs.configuration || 'Release' }}
+
 defaults:
   run:
     shell: bash

@@ -41,8 +41,8 @@
 	weak
 [file ".github/workflows/build.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/build.yml
-	sha = 5fb172362c767bef7c36478f1a6bdc264723f8f9
-	etag = 6efc7d096b25bb4bbeffe7960a1194f1ceb5d21abeda85d28b55594b648ab44a
+	sha = 65f89e06ed7b2ac33ed3b729adc865b7076840d8
+	etag = 20ef46203325f5b3d06a991f8b38c24bcea49fd74d39062a62003448e2dd8b0a
 	weak
 [file ".github/workflows/changelog.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/changelog.yml
@@ -56,8 +56,8 @@
 	weak
 [file ".github/workflows/publish.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/publish.yml
-	sha = 5fb172362c767bef7c36478f1a6bdc264723f8f9
-	etag = 9ea4083894308a610742488923d2a44778ebba6ca73fb13424647d9a82c918b4
+	sha = 40ee833a83d843c242914599e2635ca9a05aa837
+	etag = 105db682c332b2bb0873e60a7d2da45b00fe7d83da0f0e7dbf9a84bc5be77c25
 	weak
 [file ".gitignore"]
 	url = https://github.com/devlooped/oss/blob/main/.gitignore
@@ -66,8 +66,8 @@
 	weak
 [file "Directory.Build.rsp"]
 	url = https://github.com/devlooped/oss/blob/main/Directory.Build.rsp
-	sha = ae25fae9d7daf0cb47d537ba870914aa3052f0c9
-	etag = 6a6c6e1d3895df953abf14c82b0899e3eea75cdcd679f6212dcfea15183d73d6
+	sha = 0f7f7f7e8a29de9b535676f75fe7c67e629a5e8c
+	etag = 0ccae83fc51f400bfd7058170bfec7aba11455e24a46a0d7e6a358da6486e255
 	weak
 [file "_config.yml"]
 	url = https://github.com/devlooped/oss/blob/main/_config.yml
@@ -86,13 +86,13 @@
 	weak
 [file "src/Directory.Build.props"]
 	url = https://github.com/devlooped/oss/blob/main/src/Directory.Build.props
-	sha = 6e96c592c7b44bfda10404b9f90e4b8fab299249
-	etag = a4925eb815bbcecc022de8d3245db069573d96ac5ecdf5f0e604f06b5577b01e
+	sha = b76de49afb376aa48eb172963ed70663b59b31d3
+	etag = c8b56f3860cc7ccb8773b7bd6189f5c7a6e3a2c27e9104c1ee201fbdc5af9873
 	weak
 [file "src/Directory.Build.targets"]
 	url = https://github.com/devlooped/oss/blob/main/src/Directory.Build.targets
-	sha = 5801de0d7994a2ed43dcdc37564ed594d17ed076
-	etag = fa2d4bd0aebb490175654f3735b6dc37a88a145f14152f314d12ed2e61cce435
+	sha = 33a20db26e47589769284817b271ce67ea9ccfd8
+	etag = 1a3a0151b5771ee97ed8351254ff4c18a0ff568e0df5c33c6830f069bfbb067b
 	weak
 [file "src/kzu.snk"]
 	url = https://github.com/devlooped/oss/blob/main/src/kzu.snk
@@ -104,15 +104,10 @@
 	sha = 9a1b07589b9bde93bc12528e9325712a32dec418
 	etag = b54216ac431a83ce5477828d391f02046527e7f6fffd21da1d03324d352c3efb
 	weak
-[file "src/nuget.config"]
-	url = https://github.com/devlooped/oss/blob/main/src/nuget.config
-	sha = 0d911c2aa865d2f774917a02da51a9ed3d0d2b56
-	etag = e279911631ae6fa45ba6bd980d0674fc5a95d5793493425ff8ce4a8f2407a213
-	weak
 [file ".github/workflows/includes.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/includes.yml
-	sha = 5fb172362c767bef7c36478f1a6bdc264723f8f9
-	etag = e5ee22e115c925fb85ec931cda3ac811fcc453c03904554fa3f573935b221d34
+	sha = d152e7437fd0d6f6d9363d23cb3b78c07335ea49
+	etag = ec40db34f379d0c6d83b2ec15624f330318a172cc4f85b5417c63e86eaf601df
 	weak
 [file ".github/workflows/combine-prs.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/combine-prs.yml
@@ -128,9 +123,4 @@
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/changelog.config
 	sha = 055a8b7c94b74ae139cce919d60b83976d2a9942
 	etag = ddb17acb5872e9e69a76f9dec0ca590f25382caa2ccf750df058dcabb674db2b
-	weak
-[file ".github/workflows/sponsor.yml"]
-	url = https://github.com/devlooped/oss/blob/main/.github/workflows/sponsor.yml
-	sha = 5fb172362c767bef7c36478f1a6bdc264723f8f9
-	etag = 0849ee61af6daee29615f9632173b4e82da5bfa9d78ff28907e9408bd5acde4d
 	weak
