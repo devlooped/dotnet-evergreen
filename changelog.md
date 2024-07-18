@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.4.0](https://github.com/devlooped/dotnet-evergreen/tree/v1.4.0) (2024-07-18)
+
+[Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.3.2...v1.4.0)
+
+:sparkles: Implemented enhancements:
+
+- Update to .NET8 LTS, bump dependencies [\#75](https://github.com/devlooped/dotnet-evergreen/pull/75) (@kzu)
+
 ## [v1.3.2](https://github.com/devlooped/dotnet-evergreen/tree/v1.3.2) (2023-06-30)
 
 [Full Changelog](https://github.com/devlooped/dotnet-evergreen/compare/v1.3.1...v1.3.2)
