@@ -6,8 +6,7 @@
     </Description>
 
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net5.0</TargetFrameworks>
-    <TargetFramework Condition="'$(BuildingInsideVisualStudio)' == 'true'">net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
 
     <AssemblyName>evergreen</AssemblyName>
     <RootNamespace>Devlooped</RootNamespace>
@@ -20,17 +19,15 @@
     <PackageTags>dotnet dotnet-tool</PackageTags>
 
     <PackageProjectUrl>https://clarius.org/dotnet-evergreen</PackageProjectUrl>
-
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
-    <PackageReference Include="DotNetConfig" Version="1.0.6" />
+    <PackageReference Include="DotNetConfig" Version="1.2.0" />
     <PackageReference Include="IsExternalInit" Version="1.0.3" PrivateAssets="all" />
-    <PackageReference Include="Spectre.Console" Version="0.47.0" />
+    <PackageReference Include="Spectre.Console" Version="0.49.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21308.1" />
-    <PackageReference Include="NuGet.Protocol" Version="6.7.0" />
+    <PackageReference Include="NuGet.Protocol" Version="6.10.1" />
   </ItemGroup>
 
   <ItemGroup>
